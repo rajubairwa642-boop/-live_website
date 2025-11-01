@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Account</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .register-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Create Account</button>
+    </form>
+    <div id="message" class="msg"></div>
+    <p style="text-align:center; margin-top:10px;">
+      Already have an account? <a href="login.html">Login</a>
+    </p>
+  </div>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const msgDiv = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msgDiv.textContent = "Please wait...";
+      msgDiv.className = "msg";
+
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const res = await fetch("http://localhost:5000/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          msgDiv.textContent = data.error || "Registration failed!";
+          msgDiv.className = "msg error";
+        } else {
+          msgDiv.textContent = data.message;
+          msgDiv.className = "msg success";
+
+          // ✅ यहीं decide करना है redirect कहाँ करना है
+          // Option 1: Register के बाद login.html पर भेज दो
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+
+          // Option 2: Direct login करके dashboard.html पर भेजना है?
+          // → तो यहाँ login API call करनी होगी और फिर token save करके redirect करना होगा
+        }
+      } catch (err) {
+        console.error(err);
+        msgDiv.textContent = "Server error!";
+        msgDiv.className = "msg error";
+      }
+    });
+  </script>
+</body>
+</html>

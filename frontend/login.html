@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ishvar Live - Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* Age Popup */
+    #agePopup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #agePopup .popup-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 300px;
+    }
+    #agePopup h2 { margin-bottom: 20px; }
+    #agePopup button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #yesBtn { background: green; color: white; }
+    #noBtn { background: red; color: white; }
+
+    /* Top Navbar */
+    .navbar {
+      background-color: #a50000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 20px;
+      color: #fff;
+    }
+    .navbar .search {
+      flex: 1;
+      margin: 0 20px;
+    }
+    .navbar input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      width: 200px;
+      bottom: 0;
+      background-color: #111;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #bbb;
+    }
+    .sidebar a {
+      display: block;
+      color: #eee;
+      text-decoration: none;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .sidebar a:hover { color: #ff4747; }
+
+    /* Main content */
+    .main {
+      margin-left: 220px;
+      padding: 50px;
+      text-align: center;
+    }
+    .login-box {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      margin: auto;
+    }
+    .login-box h2 { margin-bottom: 20px; }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #loginBtn { background: green; color: white; }
+    #registerBtn { background: blue; color: white; margin-top: 10px; }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      background: #111;
+      color: #aaa;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a {
+      color: #ff4747;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Age Popup -->
+  <div id="agePopup">
+    <div class="popup-box">
+      <h2>Are you 18+ ?</h2>
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">ISHVAR LIVE</div>
+    <div class="search">
+      <input type="text" placeholder="Search models, categories...">
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#">🏠 Home</a>
+    <a href="#">🔥 Feed</a>
+    <a href="#">⭐ Recommended</a>
+    <a href="#"❤️ My Favorites</a>
+    <a href="#">🔒 Best for Privates</a>
+    <a href="#">⏱ Watch History</a>
+
+    <h3>Specials</h3>
+    <a href="#">New Models</a>
+    <a href="#">VR Cams</a>
+    <a href="#">Indian</a>
+    <a href="#">BDSM</a>
+
+    <h3>Age</h3>
+    <a href="#">Teen 18+</a>
+    <a href="#">Young 22+</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="login-box">
+      <h2>Log In</h2>
+      <input type="text" id="email" placeholder="Username or Email">
+      <input type="password" id="password" placeholder="Password">
+      <button id="loginBtn">Log In</button>
+      <button id="registerBtn">Create Account</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <a href="#">About Us</a> | 
+      <a href="#">Privacy Policy</a> | 
+      <a href="#">Work with Us</a> | 
+      <a href="#">Support & FAQ</a>
+    </p>
+    <p>Contact: +91 7725901448</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // AGE POPUP
+    const agePopup = document.getElementById("agePopup");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    yesBtn.addEventListener("click", () => {
+      agePopup.style.display = "none";
+    });
+
+    noBtn.addEventListener("click", () => {
+      document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:200px;'>You must be 18+ to enter this site.</h1>";
+    });
+
+    // LOGIN
+    const loginBtn = document.getElementById("loginBtn");
+    loginBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("http://localhost:5000/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("✅ Login successful");
+          localStorage.setItem("token", data.token);
+          window.location.href = "model.html"; // redirect after login
+        } else {
+          alert("❌ " + data.error);
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
+
+    // REGISTER (redirect to register page)
+    const registerBtn = document.getElementById("registerBtn");
+    registerBtn.addEventListener("click", () => {
+      window.location.href = "register.html";
+    });
+  </script>
+
+</body>
+</html>
