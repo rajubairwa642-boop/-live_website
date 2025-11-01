@@ -83,7 +83,7 @@
       const password = document.getElementById("password").value.trim();
 
       try {
-        const res = await fetch("http://localhost:5000/auth/register", {
+        const res = await fetch("https://live-backend-oirt.onrender.com/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password })
@@ -116,3 +116,4 @@
   </script>
 </body>
 </html>
+
