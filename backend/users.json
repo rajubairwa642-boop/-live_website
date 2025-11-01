@@ -1,0 +1,67 @@
+[
+  {
+    "id": "222f6f70-b7d0-45ab-a01f-39f19ec8b63f",
+    "username": "ishvar",
+    "email": "ishvarekh@gmail.com",
+    "passwordHash": "$2b$10$5ZxcpsiJjIlAJJyAnfGuQ.ZViGv.QjNoBNjlMxgq/rO5JfvIzIyHS",
+    "role": "admin",
+    "createdAt": 1755800982818
+  },
+  {
+    "id": "aa0c0c54-4554-4d0b-9e53-4ee1665da3ee",
+    "username": "raj",
+    "email": "raj@example.com",
+    "passwordHash": "$2b$10$ozpiNqGB3SGAiahZB1ar4udyWtDKiOWO7HnftsdJuS/hUwDtMpUia",
+    "role": "user",
+    "createdAt": 1755907434428,
+    "verified": false,
+    "verifyToken": "a9042e4d-0819-4071-9465-2d93fb7eda3b"
+  },
+  {
+    "id": "81222861-d1b3-4439-8bcb-7d2f8b1d9e8a",
+    "username": "raj7725",
+    "email": "rajubairwa@gmail.com",
+    "passwordHash": "$2b$10$/iy06k/TVyuFxQB6nBx3euaJ46QjZixzat962nvpqcMY4/zceyLjW",
+    "role": "user",
+    "createdAt": 1755909764046,
+    "verified": false,
+    "verifyToken": "602f1265-7f13-4242-9da0-e0832f41bf07"
+  },
+  {
+    "id": "b95d8875-8e68-4c4d-a1c3-239d348a3b34",
+    "username": "raj7725",
+    "email": "rajubairwa642@gmail.com",
+    "passwordHash": "$2b$10$DsmQTo.XiNlYK4djGjhTguwQ9kRKdNTOCwY/Pl89A.DEuIwe/XOhW",
+    "role": "user",
+    "createdAt": 1755913505796,
+    "verified": false,
+    "verifyToken": "e62cb5b1-dd7b-49c2-9181-79d701a40406"
+  },
+  {
+    "id": "b8bf923a-06d0-4119-a202-45b7887a12e8",
+    "username": "seema",
+    "email": "seemabairava64@gmail.com",
+    "passwordHash": "$2b$10$BFitYX.3IYK8gl72lkyr4.EtVQpRWqCd0WiM.teAeWCmFpLJKO1du",
+    "role": "user",
+    "createdAt": 1755913867312,
+    "verified": true
+  },
+  {
+    "id": "81259cf1-9fc0-4d9f-8363-a3d40c1cb5f0",
+    "username": "Ruchi",
+    "email": "soniasona398@gmail.com",
+    "passwordHash": "$2b$10$mn7Hlh9do54I4AJMT6KKmuVwlrwdQwlR7eIu7TBZKNGTHrBlsfFyG",
+    "role": "user",
+    "createdAt": 1755944611726,
+    "verified": true
+  },
+  {
+    "id": "c41626aa-5c9e-4d3e-b917-f9308a22c98d",
+    "username": "raj_ki_priya",
+    "email": "vishal7studio77@gmail.com",
+    "passwordHash": "$2b$10$daLD5RYik8FyAPKTvnsAOOeBSWTmdh0fASkTSKWlR3tJYqF3FdPme",
+    "role": "user",
+    "createdAt": 1755946835858,
+    "verified": true
+  }
+]
