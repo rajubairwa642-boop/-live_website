@@ -99,7 +99,7 @@ app.post("/auth/register", async (req, res) => {
   const verifyLink = `${BASE_URL}/auth/verify/${verifyToken}`;
   try {
     await transporter.sendMail({
-      from: '"Ishvar Live" <no-reply@ishvarlive.com>',
+      from: '"live website" <ishvarekh@gmail.com>',
       to: email,
       subject: "Verify your email - Ishvar Live",
       text: `Hi ${username}, please verify your account: ${verifyLink}`,
@@ -217,3 +217,4 @@ app.delete("/admin/users/:id", auth, adminOnly, (req, res) => {
 
 // ---------- start ----------
 app.listen(PORT, () => console.log(`🔐 Auth API running on port ${PORT}`));
+
