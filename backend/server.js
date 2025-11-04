@@ -1,4 +1,4 @@
-// server.js — Roles: user, admin + Email Verification
+// server.js — Roles: user, admin + Email Verification (Brevo SMTP)
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -9,8 +9,8 @@ const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 
 const app = express();
-const PORT = process.env.PORT || 5000;   // ✅ Render fix
-const BASE_URL = process.env.BASE_URL || `https://live-backend-oirt.onrender.com`; // ✅ For email links
+const PORT = process.env.PORT || 5000;
+const BASE_URL = process.env.BASE_URL || `https://live-backend-oirt.onrender.com`;
 const JWT_SECRET = process.env.JWT_SECRET || "super_secret_demo";
 const USERS_FILE = path.join(__dirname, "users.json");
 
@@ -49,18 +49,19 @@ function adminOnly(req, res, next) {
   return res.status(403).json({ error: "Admin only" });
 }
 
-// ---------- Email Setup ----------
+// ---------- Email Setup (BREVO SMTP) ----------
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp-relay.brevo.com",
+  port: 587,
   auth: {
-    user: "ishvarekh@gmail.com",        // अपना Gmail डालो
-    pass: "okfa lnyl rexz vhuy"         // App password (Google से बनाया हुआ)
+    user: "9ac9ec001@smtp-brevo.com", // Brevo SMTP login
+    pass: "xsmtpsib-32a6617a38bacfad86d3e03921a0724700589caa2a6aaa674cb77d97394ca8d2-sr8c0Y0DNMP0rXOm" // Brevo API key
   },
 });
 
 // ---------- routes ----------
 app.get("/", (_, res) =>
-  res.send("✅ Backend with Auth + Roles + Email is running")
+  res.send("✅ Backend with Auth + Roles + Email (Brevo SMTP) is running")
 );
 
 /**
@@ -98,19 +99,22 @@ app.post("/auth/register", async (req, res) => {
   const verifyLink = `${BASE_URL}/auth/verify/${verifyToken}`;
   try {
     await transporter.sendMail({
-      from: '"My App" <ishvarekh@gmail.com>',
+      from: '"Ishvar Live" <no-reply@ishvarlive.com>',
       to: email,
-      subject: "Verify your email",
+      subject: "Verify your email - Ishvar Live",
       text: `Hi ${username}, please verify your account: ${verifyLink}`,
-      html: `<p>Hi <b>${username}</b>,</p><p>Please verify your account by clicking the link below:</p><a href="${verifyLink}">${verifyLink}</a>`,
+      html: `<p>Hi <b>${username}</b>,</p>
+             <p>Please verify your account by clicking the link below:</p>
+             <a href="${verifyLink}">${verifyLink}</a>
+             <p>Thank you for joining Ishvar Live!</p>`,
     });
   } catch (e) {
-    console.error("Email send failed", e);
+    console.error("❌ Email send failed", e);
   }
 
   res.json({
     message:
-      "Registered successfully. Please check your email to verify your account.",
+      "✅ Registered successfully. Please check your email to verify your account.",
   });
 });
 
