@@ -73,6 +73,9 @@
     const form = document.getElementById("registerForm");
     const msgDiv = document.getElementById("message");
 
+    // ✅ Backend URL: localhost for dev, live for production
+    const API_URL = "http://localhost:5000"; // change to live URL if needed
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       msgDiv.textContent = "Please wait...";
@@ -82,8 +85,15 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
+      // Basic client-side validation
+      if (!username || !email || !password) {
+        msgDiv.textContent = "All fields are required!";
+        msgDiv.className = "msg error";
+        return;
+      }
+
       try {
-        const res = await fetch("https://live-backend-oirt.onrender.com/auth/register", {
+        const res = await fetch(`${API_URL}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password })
@@ -98,22 +108,17 @@
           msgDiv.textContent = data.message;
           msgDiv.className = "msg success";
 
-          // ✅ यहीं decide करना है redirect कहाँ करना है
-          // Option 1: Register के बाद login.html पर भेज दो
+          // Redirect to login page after 2 seconds
           setTimeout(() => {
             window.location.href = "login.html";
           }, 2000);
-
-          // Option 2: Direct login करके dashboard.html पर भेजना है?
-          // → तो यहाँ login API call करनी होगी और फिर token save करके redirect करना होगा
         }
       } catch (err) {
         console.error(err);
-        msgDiv.textContent = "Server error!";
+        msgDiv.textContent = "Server error! Please try again later.";
         msgDiv.className = "msg error";
       }
     });
   </script>
 </body>
 </html>
-
