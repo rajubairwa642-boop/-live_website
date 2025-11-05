@@ -73,8 +73,8 @@
     const form = document.getElementById("registerForm");
     const msgDiv = document.getElementById("message");
 
-    // ✅ Backend URL: localhost for dev, live for production
-    const API_URL = "http://localhost:5000"; // change to live URL if needed
+    // ✅ Live backend URL (Render)
+    const API_URL = "https://live-backend-oirt.onrender.com";
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -85,7 +85,6 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      // Basic client-side validation
       if (!username || !email || !password) {
         msgDiv.textContent = "All fields are required!";
         msgDiv.className = "msg error";
@@ -108,7 +107,6 @@
           msgDiv.textContent = data.message;
           msgDiv.className = "msg success";
 
-          // Redirect to login page after 2 seconds
           setTimeout(() => {
             window.location.href = "login.html";
           }, 2000);
