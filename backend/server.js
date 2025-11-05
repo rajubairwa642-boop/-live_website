@@ -1,5 +1,5 @@
-// server.js — Roles: user, admin + Email Verification (Updated with .env & secure NodeMailer)
-require('dotenv').config(); // Load environment variables
+// server.js — Roles: user, admin + Email Verification (Updated with .env & secure NodeMailer + background mail)
+require('dotenv').config({ path: 'mail.env' }); // Load environment variables from mail.env
 
 const express = require("express");
 const cors = require("cors");
@@ -54,10 +54,12 @@ function adminOnly(req, res, next) {
 
 // ---------- Email Setup ----------
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: false, // Gmail 587 ke liye
   auth: {
-    user: process.env.EMAIL_USER, // Gmail from .env
-    pass: process.env.EMAIL_PASS, // App password from .env
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -97,21 +99,22 @@ app.post("/auth/register", async (req, res) => {
 
   const verifyLink = `${BASE_URL}/auth/verify/${verifyToken}`;
 
-  try {
-    await transporter.sendMail({
-      from: `"My App" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Verify your email",
-      text: `Hi ${username}, please verify your account: ${verifyLink}`,
-      html: `<p>Hi <b>${username}</b>,</p><p>Please verify your account by clicking below:</p><a href="${verifyLink}">${verifyLink}</a>`,
-    });
-  } catch (e) {
-    console.error("Email send failed", e);
-    return res.status(500).json({ error: "Failed to send verification email" });
-  }
-
+  // Send response immediately
   res.json({
     message: "Registered successfully. Please check your email to verify your account.",
+  });
+
+  // Send email in background (fire-and-forget)
+  transporter.sendMail({
+    from: `"My App" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Verify your email",
+    text: `Hi ${username}, please verify your account: ${verifyLink}`,
+    html: `<p>Hi <b>${username}</b>,</p><p>Please verify your account by clicking below:</p><a href="${verifyLink}">${verifyLink}</a>`,
+  }).then(() => {
+    console.log(`✅ Verification mail sent to ${email}`);
+  }).catch(err => {
+    console.error(`❌ Failed to send mail to ${email}:`, err.message);
   });
 });
 
