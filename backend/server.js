@@ -1,4 +1,4 @@
-// server.js — Roles: user, admin + Email Verification (Brevo SMTP)
+// server.js — Roles: user, admin + Email Verification (Brevo)
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -6,7 +6,7 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuid } = require("uuid");
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,24 +44,15 @@ function auth(req, res, next) {
     return res.status(401).json({ error: "Invalid token" });
   }
 }
+
 function adminOnly(req, res, next) {
   if (req.user?.role === "admin") return next();
   return res.status(403).json({ error: "Admin only" });
 }
 
-// ---------- Email Setup (BREVO SMTP) ----------
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  auth: {
-    user: "9ac9ec001@smtp-brevo.com", // Brevo SMTP login
-    pass: "xsmtpsib-32a6617a38bacfad86d3e03921a0724700589caa2a6aaa674cb77d97394ca8d2-sr8c0Y0DNMP0rXOm" // Brevo API key
-  },
-});
-
 // ---------- routes ----------
 app.get("/", (_, res) =>
-  res.send("✅ Backend with Auth + Roles + Email (Brevo SMTP) is running")
+  res.send("✅ Backend with Auth + Roles + Email (Brevo) is running")
 );
 
 /**
@@ -95,27 +86,33 @@ app.post("/auth/register", async (req, res) => {
   users.push(user);
   writeUsers(users);
 
-  // ✅ send verification email with Render URL
   const verifyLink = `${BASE_URL}/auth/verify/${verifyToken}`;
-  try {
-    await transporter.sendMail({
-      from: '"Ishvar Live" <9ac9ec001@smtp-brevo.com>',
-      to: email,
-      subject: "Verify your email - Ishvar Live",
-      text: `Hi ${username}, please verify your account: ${verifyLink}`,
-      html: `<p>Hi <b>${username}</b>,</p>
-             <p>Please verify your account by clicking the link below:</p>
-             <a href="${verifyLink}">${verifyLink}</a>
-             <p>Thank you for joining Ishvar Live!</p>`,
-    });
-  } catch (e) {
-    console.error("❌ Email send failed", e);
-  }
 
-  res.json({
-    message:
-      "✅ Registered successfully. Please check your email to verify your account.",
-  });
+  // ---------- Brevo Email send ----------
+  try {
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: { name: "My App", email: "you@domain.com" }, // apna Brevo verified sender
+        to: [{ email, name: username }],
+        subject: "Verify your email",
+        htmlContent: `<p>Hi <b>${username}</b>,</p>
+                      <p>Please verify your account by clicking the link below:</p>
+                      <a href="${verifyLink}">${verifyLink}</a>`,
+        textContent: `Hi ${username}, please verify your account: ${verifyLink}`,
+      },
+      {
+        headers: {
+          "api-key": "YOUR_BREVO_API_KEY", // apni Brevo API key
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    res.json({ message: "Registered successfully. Please check your email to verify your account." });
+  } catch (e) {
+    console.error("Brevo email failed", e.response?.data || e.message);
+    res.status(500).json({ error: "Failed to send verification email. Please try again later." });
+  }
 });
 
 /**
@@ -217,6 +214,3 @@ app.delete("/admin/users/:id", auth, adminOnly, (req, res) => {
 
 // ---------- start ----------
 app.listen(PORT, () => console.log(`🔐 Auth API running on port ${PORT}`));
-
-
-
